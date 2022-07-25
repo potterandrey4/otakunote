@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="wrapper">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="films">
+				<div class="col-lg-12">
+				{% if list_film %}
+					{% for film in list_film %}
+						<p>{{ film.title }}</p>
+					{% endfor %}
+				{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

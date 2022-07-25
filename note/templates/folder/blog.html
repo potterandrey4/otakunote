@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Blog</h1>
+
+<div class="clear"></div>
+<a href="{% url 'add_post' %}">Добавить свою рецензию</a>
+<div class="clear"></div>
+
+<div class="blog">
+	{% for v in reviews %}
+		<h3>{{v.title}}</h3>
+		<p class="callout">{{v.text}}</p>
+		<p style="text-align: center;"><i>{{v.id_for_user}}</i></p>
+		<hr style="margin: 30px 0">
+	{% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    
+    <div class="my_form col-sm-12 center-block">
+    	<form method="post" action="{% url 'add_serial' %}">
+    		<legend>Добавить новый сериал</legend>
+            {% csrf_token %}
+            
+            {{ form|crispy }}
+
+            <button type="submit" class="btn btn-dark">Добавить</button>
+            <input type="hidden" name="next" value="{{ next }}" />
+        </form>
+    </div>
+
+{% endblock %}

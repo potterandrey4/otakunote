@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+	<div class="wrapper">
+		<div class="container-fluid">
+			<div class="row">
+
+				<div class="col-lg-8">	
+					<h4><em>Сейчас читаю/смотрю</em></h4>
+					<hr>
+					<h5>Книги</h5>
+					{% for book in books %}
+						<p><a href="{% url 'book_info' book.id %}" style="color: black;">{{ book.title }}</a></p>
+					{% endfor %}
+
+					<br><br>
+
+					<h5>Фильмы</h5>
+					{% for film in films %}
+						<p><a href="{% url 'film_info' film.id %}" style="color: black;">{{ film.title }}</a></p>
+					{% endfor %}
+
+					<br><br>
+
+					<h5>Сериалы</h5>
+					{% for serial in serials %}
+						<p><a href="{% url 'serial_info' serial.id %}" style="color: black;">{{ serial.title }}</a></p>
+					{% endfor %}
+
+				</div>
+
+				<div class="d-block d-lg-none">
+					<div class="clear"></div>
+					<hr>
+				</div>
+
+				<div class="col-lg-4">
+					<h4>Новости сайта</h4>
+				
+						<p>
+							В первую очередь мы получаем значение 'num_visits' из сессии, возвращая 0, если оно не было установлено ранее. Каждый раз при получении запроса, мы увеличиваем данное значение на единицу и сохраняем его обратно в сессии (до следующего посещения данной страницы пользователем). Затем переменная num_visits передаётся в шаблон через переменную контекста context.  
+						</p>
+					
+						<p>
+							Вы можете получить информацию о текущем зарегистрированном пользователе в шаблонах с переменной шаблона {{user}} (это добавляется в контекст шаблона по умолчанию при настройке проекта, как и в нашем скелете).
+						</p>
+					
+					
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
+<div class="clear"></div>
+
+{% endblock %}

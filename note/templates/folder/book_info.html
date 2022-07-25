@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	
+	<div class="wrapper">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-12 col-sm-12 my_form">
+
+					<table style="border-spacing: 20px 25px;  border-collapse: separate !important; text-align: center;">
+						
+						<tr>
+							<th>Название:</th><td>{{ book.title }}</td>
+						</tr>
+
+						<tr><th>Тип: </th><td>{{ book.type_book }}</td></tr>
+						
+						<tr>
+							<th>Автор:</th><td>{{ book.author }}</td>
+						</tr>
+
+						<tr>
+							<th>Эмоционально:</th><td>{{ book.emotional_heaviness }}</td>
+						</tr>
+
+						<tr>
+						<th>Жанры:</th>
+						<td>
+						{% for genre in book.genre_book.all %}
+							{{genre}}<br>
+						{% endfor %}
+						</td>
+						</tr>
+
+						<tr>
+							<th>Ссылка</th>
+							<td><a href="{{ book.link }}"><em>*жмяк*</em></td>
+						</tr>					
+
+						<form method="GET" action="{% url 'book_edit' book.id %}">
+					        {% csrf_token %}
+					        <tr>
+								<th>Страница:</th>
+						        <td><input type="number" name="lastpage" value="{{book.lastpage}}" style="width: 60%; text-align:center;" /></td>
+					        </tr>
+
+					        <tr>
+					            <th>Статус:</th>
+					            <td>
+					            	<select name="status">
+					            		<option value={{ book.status }}>{{ book.status }}</option>
+										{% for st in status_variant %}
+											{% if st != book.status %}
+											<option value={{st}}>{{st}}</option>
+											{% endif %}
+										{% endfor %}
+									</select>
+					            </td>	
+					        </tr>
+					        <tr>
+					        	<td colspan="2"><input type="submit" value="Сохранить" ></td>
+					        </tr>
+				    	</form>
+							
+					</table>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

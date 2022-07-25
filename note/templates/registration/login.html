@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+{% if form.errors %}
+  <p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+
+{% if user.is_authenticated %}
+
+{% else %}
+
+<div class="col-lg-6"></div>
+<h2>Войти в аккаунт</h2>
+<div class="my_form col-sm-12 col-lg-6" >
+		<form method="post" action="{% url 'login' %}">
+
+		{% csrf_token %}
+
+		{{ form.username|as_crispy_field }}
+
+		{{ form.password|as_crispy_field }}
+
+		<button type="submit" class="btn btn-dark">Войти</button>
+		<input type="hidden" name="next" value="{{ next }}" />
+	</form>
+
+<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+</div>
+
+{% endif %}
+
+{% endblock %}

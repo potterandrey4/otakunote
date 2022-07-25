@@ -1,0 +1,7 @@
+{% autoescape off %}
+
+Hi, {{ user.first_name }}! <br>
+Перейди по ссылке для подтверждения email: <br>
+http://{{ domain }}{% url 'verify_email' uidb64=uid token=token %}
+
+{% endautoescape %}
