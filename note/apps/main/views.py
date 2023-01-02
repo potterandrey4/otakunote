@@ -30,20 +30,20 @@ User = get_user_model()
 def index(request):
 	#variable_status_serial = request.GET.get('status_film')
 	#variable_status_book = request.GET.get('status_book')
-	
+
 	films = Film.objects.filter(status = 'Смотрю', id_for_user_id = request.user)
 	books = Book.objects.filter(status = 'Читаю', id_for_user_id = request.user)
 	serials = Serial.objects.filter(status = 'Смотрю', id_for_user_id = request.user)
 
 
-		#raise Http404('Films не найдены :(')	
+		#raise Http404('Films не найдены :(')
 
 #	num_users=User.objects.count()
 #
 #	num_visits=request.session.get('num_visits', 0)
 #	request.session['num_visits'] = num_visits+1
 
-	return render(request, 'folder/main.html', 
+	return render(request, 'folder/main.html',
 		context={
 		'books':books,
 		'films':films,
@@ -144,7 +144,7 @@ class AddSerial(CreateView):
 		return super().form_valid(form)
 
 
-
+@login_required
 def books(request):
 	try:
 		all_books = Book.objects.filter(id_for_user_id = request.user)
@@ -153,9 +153,51 @@ def books(request):
 		page_obj = paginator.get_page(page_number)
 		genre_book = GenreBook.objects.all()
 	except:
-		raise Http404('Books не найдены :(')	
+		raise Http404('Books не найдены :(')
 
 	return render(request, 'folder/book.html', {'page_obj': page_obj, 'genre_book': genre_book, })
+
+class FilterBook(CreateView):
+	form_class = FilterBookForm
+	template_name = 'folder/book.html'
+
+	def get(self, request):
+		books = []
+
+		genre = request.GET.get('genre_book')
+		emotional_heaviness = request.GET.get('emotional')
+		status = request.GET.get('status')
+		type_book = request.GET.get('type_book')
+
+		print(status)
+
+		books += Book.objects.filter(emotional_heaviness = emotional_heaviness, genre_book = genre, status = status, type_book = type_book)
+		#books.filter(genre_book = genre)
+		#books.filter(status = status)
+		#books.filter(type_book = type_book)
+
+		paginator = Paginator(books, 15)
+		page_number = request.GET.get('page')
+		page_obj = paginator.get_page(page_number)
+		genre_book = GenreBook.objects.all()
+
+		context = {
+			'form': FilterBookForm(),
+			'page_obj': page_obj,
+			'genre_book': genre_book,
+
+		}
+		return render(request, self.template_name, context)
+
+	def post(self, request, book_id):
+		form = FilterBookForm(request.POST)
+
+		if form.is_valid():
+			paginator = Paginator(books, 15)
+			page_number = request.GET.get('page')
+			page_obj = paginator.get_page(page_number)
+			genre_book = GenreBook.objects.all()
+		return render(request, 'folder/book.html', {'page_obj': page_obj, 'form':form})
 
 
 class BookInfo(CreateView):
@@ -168,7 +210,7 @@ class BookInfo(CreateView):
 		context = {
 			'form': ChangeBookForm(),
 			'book': book,
-			
+
 		}
 		return render(request, self.template_name, context)
 
@@ -182,14 +224,14 @@ class BookInfo(CreateView):
 		return render(request, 'folder/book_info.html', {'book': book, 'book_id': book_id})
 
 
-
+@login_required
 def book_info(request, book_id):
 	try:
 		book = Book.objects.get(id = book_id)
 		form = ChangeBookForm
 		status_variant = ['Планирую', 'Читаю', 'Прочитано', 'Заброшено']
 	except:
-		raise Http404('Book не найденa :(')	
+		raise Http404('Book не найденa :(')
 
 	return render(request, 'folder/book_info.html', {'book': book, 'form': form, 'status_variant':status_variant})
 
@@ -201,7 +243,7 @@ class BookEdit(View):
 		book.save()
 		return redirect('book_info', book_id)
 
-
+@login_required
 def films(request):
 	try:
 		all_books = Film.objects.filter(id_for_user_id = request.user)
@@ -209,11 +251,11 @@ def films(request):
 		page_number = request.GET.get('page')
 		page_obj = paginator.get_page(page_number)
 	except:
-		raise Http404('Films не найдены :(')	
+		raise Http404('Films не найдены :(')
 
 	return render(request, 'folder/film.html', {'page_obj': page_obj})
 
-
+@login_required
 def film_info(request, film_id):
 	try:
 		film = Film.objects.get(id = film_id)
@@ -230,7 +272,7 @@ class FilmEdit(View):
 		film.save()
 		return redirect('film_info', film_id)
 
-
+@login_required
 def serials(request):
 	try:
 		all_serials = Serial.objects.filter(id_for_user_id = request.user)
@@ -238,11 +280,11 @@ def serials(request):
 		page_number = request.GET.get('page')
 		page_obj = paginator.get_page(page_number)
 	except:
-		raise Http404('Serials не найдены :(')	
+		raise Http404('Serials не найдены :(')
 
 	return render(request, 'folder/serial.html', {'page_obj': page_obj,})
 
-
+@login_required
 def serial_info(request, serial_id):
 	try:
 		serial = Serial.objects.get(id = serial_id)
@@ -260,6 +302,7 @@ class SerialEdit(View):
 		serial.save()
 		return redirect('serial_info', serial_id)
 
+@login_required
 def reviews(request):
 	if request.method == 'POST':
 		form = ContactForm(request.POST)
@@ -267,8 +310,8 @@ def reviews(request):
 			mail = send_mail(
 				form.cleaned_data['subject'],
 				form.cleaned_data['content'] + '\n\n from: ' + request.user.email,
-				'potterandrey.4@yandex.ru',
-				['potterandrey4@gmail.com'],
+				'bloknototaku@gmail.com',
+				['bloknototaku@gmail.com'],
 				fail_silently=False
 				)
 
@@ -287,10 +330,6 @@ class BookData:
 		return GenreBook.objects.all()
 
 
-class FilterBook(BookData, ListView):
-	def get_queryset(self):
-		queryset = Book.objects.filter(genre_book = self.request.GET.getlist('genre_book'))
-		return queryset
 
 
-	
+

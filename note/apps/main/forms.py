@@ -120,3 +120,31 @@ class ContactForm(forms.Form):
 	subject = forms.CharField(label='Тема', widget=forms.TextInput(attrs={'class': 'form-input'}))
 	content = forms.CharField(label='Текст', widget=forms.Textarea(attrs={'class': 'form-input', 'rows':5}))
 	
+
+class FilterBookForm(forms.Form):
+	EMOTIONAL_HEAVINESS=[
+		('Флафф', 'Флафф'),
+		('Нейтрально', 'Нейтрально'),
+		('Стекло', 'Стекло'),
+        ]
+	emotional_heaviness = forms.ChoiceField(choices=EMOTIONAL_HEAVINESS, widget=forms.RadioSelect)
+
+	STATUS_VARIABLE = [
+		('Планирую', 'Планирую'),
+		('Читаю', 'Читаю'),
+		('Прочитано', 'Прочитано'),
+		('Заброшено', 'Заброшено')
+	]
+	status = forms.ChoiceField(choices=STATUS_VARIABLE, widget=forms.RadioSelect)
+
+	TYPE_VARIABLE = [
+		('Книга', 'Книга'),
+		('Фанфик', 'Фанфик'),
+		('Манга', 'Манга'),
+		('Манхва', 'Манхва'),
+		('Комикс', 'Комикс'),
+	]
+	type_book = forms.ChoiceField(choices=TYPE_VARIABLE, widget=forms.RadioSelect)
+
+
+

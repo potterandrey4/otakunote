@@ -9,39 +9,119 @@
 	
 	<div class="info">
 
-		<form action="{% url 'book_filter' %}" method="get">
-			<p>
-			  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
-			    Расширенный фильтр
-			  </button>
-			</p>
-			<div class="collapse" id="collapseFilter">
-			  <div class="card card-body">
-			    
-			  	<h4>Жанр</h4>
-				<ul>
-					{% for genre in genre_book %}
-						<li>
-							<input type="checkbox" class="checked" name="{{genre}}">
-							<span>{{genre}}</span>
-						</li>
-					{% endfor %}
-				</ul>
+		<div class="filter">
+			<form action="{% url 'book_filter' %}" method="get">
+				<p>
+				  <button class="btn " type="button" data-bs-toggle="collapse" data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+					<b><em>Фильтр</em></b>
+				  </button>
+				</p>
+				<div class="collapse" id="collapseFilter">
+				  <div class="card card-body">
+					
+					
+				  	<table>
+						<legend>Эмоционально</legend> 
+
+						<tr>
+							<td><input type="checkbox" name="emotional" value="Флафф"></td>
+							<td> Флафф</td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" name="emotional" value="Нейтрально"></td>
+							<td> Нейтрально</td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" name="emotional" value="Стекло"></td>
+							<td> Стекло</td>
+						</tr>
+					</table>
+
+					<hr>
+
+					<table>
+						<legend>Статус</legend> 
+
+						<tr>
+							<td><input type="checkbox" name="status" value="Планирую"></td>
+							<td> Планирую</td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" name="status" value="Читаю"></td>
+							<td> Читаю</td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" name="status" value="Прочитано"></td>
+							<td> Прочитано</td>
+						</tr>
+
+						<tr>
+							<td><input type="checkbox" name="status" value="Заброшено"></td>
+							<td> Заброшено</td>
+						</tr>
+					</table>
+						
+
+					<hr>
+
+					<table>
+						<legend>Тип книги</legend>
+
+						<tr>
+							<td><input type="checkbox" name="type_book" value="Книга"></td>
+							<td>Книга</td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" name="type_book" value="Фанфик"></td>
+							<td>Фанфик</td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" name="type_book" value="Манга"></td>
+							<td>Манга</td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" name="type_book" value="Манхва"></td>
+							<td>Манхва</td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" name="type_book" value="Комикс"></td>
+							<td>Комикс</td>
+						</tr>
+					</table>
+
+					<hr>
+
+					<table>
+						<legend>Жанр</legend>
+						{% for genre in genre_book %}
+							<tr>
+								<td><input type="checkbox" id="genre" name="genre_book" value={{genre.id}}></td>
+								<td><label for="genre">{{genre}}</label></td>
+							</tr>
+						{% endfor %}
+					</table>
+					
+
+					<button type="submit" class="btn btn-dark" style="margin-top: 20px;">Искать</button>
 
 
-			  </div>
-			</div>
-		</form>
 
+				  </div>
+				</div>
+			</form>
+		</div>
 		
 	<div class="clear"></div>
 		<h4><a href="add">Добавить</a></h4><br>
 
-		{% for book in page_obj %}
-		<p><a href="{% url 'book_info' book.id %}">{{ book.title }}</a></p>
+		{% if num_books == 0 %}
+			<h6>У вас нет добавленных книг</h6>
+		{% else %}
+			{% for book in page_obj %}
+			<p><a href="{% url 'book_info' book.id %}">{{ book.title }}</a></p>
 
-		{% endfor %}
-
+			{% endfor %}
+		{% endif %}
 
 
 
